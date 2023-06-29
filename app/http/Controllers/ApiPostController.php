@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers;
-require_once 'bootstrap.php';
+use App\Filter\PostFilter;
 use App\Http\Models\Post;
 use App\RMVC\View\View;
 
@@ -9,20 +9,28 @@ class ApiPostController extends Controller
 {
     public function index()
     {
-        $posts = Post::query();
-        if(isset($_GET['title'])){
-            $posts->where('title', 'like', "%{$_GET['title']}%");
+        $query = [];
+        if (!empty($_GET['title'])) {
+            $query['title'] = $_GET['title'];
         }
-        if(isset($_GET['author'])){
-            $posts->where('author', 'like', "%{$_GET['author']}%");
+        if (!empty($_GET['author'])) {
+            $query['author'] = $_GET['author'];
         }
-        if(isset($_GET['date_from'])){
-            $posts->where('created_at', '>=', $_GET['date_from']);
+        if (!empty($_GET['date_from'])) {
+            $query['date_from'] = $_GET['date_from'];
         }
-        if(isset($_GET['date_to'])){
-            $posts->where('created_at', '<=', $_GET['date_to']);
+        if (!empty($_GET['date_to'])) {
+            $query['date_to'] = $_GET['date_to'];
         }
-        return json_encode($posts->get(), JSON_UNESCAPED_UNICODE);
+
+        if (isset($query)) {
+            $filter = new PostFilter($query);
+            $posts = Post::query()->filters($filter)->get();
+            return json_encode($posts, JSON_UNESCAPED_UNICODE);
+        }
+        $posts = Post::all();
+        return json_encode($posts, JSON_UNESCAPED_UNICODE);
+
     }
 
     public function show($post)

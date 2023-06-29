@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers;
-require_once 'bootstrap.php';
-
+use App\Filter\PostFilter;
 use App\Http\Models\Post;
 use App\RMVC\Route\Route;
 use App\RMVC\View\View;
@@ -10,25 +9,29 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::query();
-
-        if($_GET){
-            if(($_GET['title'])){
-                $posts->where('title', 'like', "%{$_GET['title']}%");
-            }
-            if(($_GET['author'])){
-                $posts->where('author', 'like', "%{$_GET['author']}%");
-            }
-            if(($_GET['date_from'])){
-                $posts->where('created_at', '>=', $_GET['date_from']);
-            }
-            if(($_GET['date_to'])){
-                $posts->where('created_at', '<=', $_GET['date_to']);
-            }
+        $query = [];
+        if (!empty($_GET['title'])) {
+            $query['title'] = $_GET['title'];
+        }
+        if (!empty($_GET['author'])) {
+            $query['author'] = $_GET['author'];
+        }
+        if (!empty($_GET['date_from'])) {
+            $query['date_from'] = $_GET['date_from'];
+        }
+        if (!empty($_GET['date_to'])) {
+            $query['date_to'] = $_GET['date_to'];
         }
 
-        $posts = $posts->get();
-        return View::view('post.index', compact('posts'));
+        if (isset($query)){
+            $filter = new PostFilter($query);
+            $posts = Post::query()->filters($filter)->get();
+            return View::view('post.index', compact('posts'));
+        }else{
+            $posts = Post::all();
+            return View::view('post.index', compact('posts'));
+
+        }
     }
 
     public function show($post)

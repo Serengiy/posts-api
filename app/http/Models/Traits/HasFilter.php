@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Models\Traits;
-
-use App\Filter\AbstractFilter;
+namespace App\Http\Models\Traits;
+use app\Filter\AbstractFilter;
 use Illuminate\Database\Eloquent\Builder;
 
 trait HasFilter
 {
-    public function filteres(AbstractFilter $filter, Builder $builder)
+    public function scopeFilters(Builder $builder, AbstractFilter $filter)
     {
         $filter->applyFilters($builder);
         return $builder;

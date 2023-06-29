@@ -123,6 +123,7 @@ class ComposerStaticInit1aac958eb9229362d4a0248af8247bad
     );
 
     public static $classMap = array (
+        'App\\Classes\\Tests' => __DIR__ . '/../..' . '/app/classes/src/Tests.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
