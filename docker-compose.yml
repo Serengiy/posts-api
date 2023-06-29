@@ -25,12 +25,13 @@ services:
     db:
         image: mysql:8.0
         volumes:
-            - ./tmp/mysql-data:/var/lib/mysql
+            - ./tmp/db:/var/lib/mysql
         environment:
             MYSQL_DATABASE: my_db_application
+#            MYSQL_LOWER_CASE_TABLE_NAMES: 0
             MYSQL_ROOT_PASSWORD: root
-
         ports:
             - "8100:3306"
         command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
         container_name: books_app_db
+
