@@ -7,7 +7,7 @@ services:
             - ./:/var/www
             - ./_docker/nginx/conf.d:/etc/nginx/conf.d
         ports:
-            - "80:80"
+            - "8080:80"
         depends_on:
             - app
         container_name: books_app_nginx
@@ -25,13 +25,12 @@ services:
     db:
         image: mysql:8.0
         volumes:
-            - ./mysql-data:/var/lib/mysql
+            - ./tmp/mysql-data:/var/lib/mysql
         environment:
             MYSQL_DATABASE: my_db_application
-            MYSQL_LOWER_CASE_TABLE_NAMES: 0
             MYSQL_ROOT_PASSWORD: root
+
         ports:
             - "8100:3306"
-        command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --lower_case_ta>
+        command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
         container_name: books_app_db
-
