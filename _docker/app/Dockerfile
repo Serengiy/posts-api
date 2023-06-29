@@ -45,6 +45,6 @@ RUN composer install \
       --prefer-dist
 
 
-RUN composer dump-autoload  --no-scripts --optimize
+
 
 WORKDIR /var/www

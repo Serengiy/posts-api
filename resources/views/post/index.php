@@ -6,40 +6,71 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Все посты</title>
 </head>
 <body class="container p-5">
     <h1 class="text-center">Все посты</h1>
+    <div>
+        <a href="/create" class="btn btn-primary">Новый пост</a>
+    </div>
+    <div>
+        <form action="/posts" class="mt-5 d-flex justify-content-between">
+            <div>
+                <input type="text" class="form-control" name="title" placeholder="Наззвание">
+            </div>
+            <div>
+                <input type="text" class="form-control" name="author" placeholder="Имя Автора">
+            </div>
+            <div>
+                <input type="date" class="form-control" name="date_from" placeholder="С конкрутной даты">
+            </div>
+            <div>
+                <input type="date" class="form-control" name="date_to" placeholder="С конкрутной даты">
+            </div>
+            <div>
+                <input type="submit" value="Поиск" class="btn btn-primary" placeholder="С конкрутной даты">
+            </div>
+        </form>
+    </div>
+    <div class="mt-5 text-center">
+        <?php
+        session_start();
+        if (isset($_SESSION['message'])) {
+            $message = $_SESSION['message'];
+            echo "<h4 class='text-success'>$message</h4>";
+            unset($_SESSION['message']);
+        }
+
+        ?>
+    </div>
     <table class="table mt-5">
         <thead class="thead-light">
         <tr>
             <th scope="col">id</th>
-            <th scope="col">Title</th>
-            <th scope="col">Name</th>
-            <th scope="col">Date</th>
+            <th scope="col">Название</th>
+            <th scope="col">Имя Автора</th>
+            <th scope="col">Дата публикации</th>
+            <th scope="col">Удаление</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody class="mt-3">
         <?php foreach($posts as $item) { ?>
             <tr>
                 <td><?=$item['id']?></td>
-                <td><?=$item['title']?></td>
+                <td><a href="<?="/posts/".$item['id']?>"><?=$item['title']?></a></td>
                 <td><?=$item['author']?></td>
-                <td><?=$item['date']?></td>
+                <td><?=date('d-m-Y',strtotime($item['updated_at']))?></td>
+                <td>
+                    <form action="/delete/" method="post">
+                        <input type="hidden" name="post_id" value="<?= $item['id']?>">
+                        <input class="btn btn-danger" type="submit" value="Удалить">
+                    </form>
+                </td>
             </tr>
         <?php } ?>
         </tbody>
     </table>
     <div>
-    </div>
-    <div class="d-flex justify-content-center">
-        <div class="d-grid">
-            <h3 class="text-center">Новый пост</h3>
-            <form action="/posts" method="post">
-                <input type="text" placeholder="text" name="text">
-                <input type="submit">
-            </form>
-        </div>
     </div>
 </body>
 </html>

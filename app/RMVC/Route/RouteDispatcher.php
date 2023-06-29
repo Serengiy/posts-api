@@ -6,6 +6,7 @@ class RouteDispatcher
 {
     private string $requestUri = '/';
     private array $paramMap = [];
+    private array $params = [];
     private array $paramRequestMap = [];
     private RouteConfiguration $routeConfiguration;
 
@@ -19,6 +20,9 @@ class RouteDispatcher
 
     public function process()
     {
+//        $this->setParams();
+//        var_dump($this->params);
+
         $this->saveRequestUri();
         $this->setParamMap();
         $this->makeRegexRequest();
@@ -69,6 +73,8 @@ class RouteDispatcher
 
     private function run()
     {
+        $URI = $this->requestUri;
+        $this->requestUri = explode('?', $URI)[0];
         if(preg_match("/$this->requestUri/", $this->routeConfiguration->route)){
             $this->render();
         }
